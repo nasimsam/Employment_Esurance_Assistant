@@ -40,30 +40,23 @@ def get_retriever():
 async def start():
 
     # Initialize the chain components
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
     retriever = get_retriever()
     llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
-    clarifying_guidelines="""Given the 'user’s question': {question}
+    prompt= PromptTemplate.from_template("""Given the 'user’s input': {input}
 
-    And the detailed information provided in 'context' and 'chat_history': {context} and {chat_history},
+    And the detailed information provided in 'context' and 'chat_history': {context} and {conversation_history},
 
-    Determine, whether a clarifying question is required.
+    Determine, whether a followup question is required.
 
     Instructions:
-    1. Analyse the 'context' and the 'user's question' to identify the specificity of the query and the scope of the information in 'context'.
-    2. If the query aligns well with a specific part of the 'context' and 'chat_history' that provides a comprehensive answer, output '~'.
-    3. If the query is broad and the 'context' include an eligibility condition that did not addressed in 'chat_history', you should ask for the eligibility requirements., output '#' and guide the chatbot to ask for clarification.
+    1. Analyse the 'context' and the 'user's input' to identify the specificity of the query and the scope of the information in 'context'.
+    2. If the query aligns well with a specific part of the 'context' and 'conversation_history' that provides a comprehensive answer.
+    3. If the query is broad and the 'context' include requiremnts that did not addressed in 'context' and 'conversation_history' then follow up question is required.
     
-
-    Output format: [Decision: '~' or '#', (if '#') then clarification is required.]"""
-    template = """Given the guidelines provided in 'clarifying question check' as
-    {clarifyingQuestionCheck},
-    the user's question stated in
-    {question},
-    and the information in both 'context' and 'chat_history' as
-    {context} and {chat_history},
-    If clarification is needed, ask a follow-up question to gather more information. The question should be specific and relevant to the user's query.
-
+    "If a follow up question is required, respond with a JSON object: "
+    {{"response_type": "clarification_request", "message": "Your follow up question here."}}
+    example of follow up questions:
     //EXAMPLES//
     User: I need to take care of my sick mother. Can I apply for EI?
 
@@ -73,21 +66,21 @@ async def start():
 
     Bot: Have you husband worked more than 600 hours in the last 52 weeks or since his last claim? Also, is he the biological or adoptive parent of the child?
 
-    //END OF EXAMPLES//
-
-    Output the question clearly and concisely, with no additional text.
-    else Output answer the question based on the information in 'context' and 'chat_history' as
-    {context} and {chat_history}."""
-    prompt = PromptTemplate(input_variables=["chat_history", "input"],
-        template=template)
+    "If no follow up question needed, respond with a JSON object: "
+    {{"response_type": "answer", "message": "your answer here based on the information in 'context' and 'conversation_history'."}}""")
+    
+    conversation_history = [
+    {"role": "system", "content": prompt}
+  ]
+    
     
     # Create the chain
-    rag_chain = (
+    rag_chain= (
         {
-            "clarifyingQuestionCheck": lambda x: clarifying_guidelines,
-            "context": lambda x: format_docs(retriever.invoke(x["question"])),
-            "question": RunnablePassthrough(),
-            "chat_history": lambda x: memory.load_memory_variables({})["chat_history"]
+
+            "context": lambda x: format_docs(retriever.invoke(x["input"])),
+            "input": RunnablePassthrough(),
+            "conversation_history": lambda x: conversation_history.append({"role": "user", "content": x["input"]})
         }
         | prompt
         | llm
@@ -95,10 +88,11 @@ async def start():
 
     
     # Store the chain in the user session
-
-    
+  
     cl.user_session.set("chain", rag_chain)
 
+    
+       
 
 
     # Send an initial message
@@ -116,13 +110,17 @@ async def main(message: cl.Message):
 
     async with cl.Step("Fetched Content 🤔"):
         async for chunk in chain.astream(
-            {"question": message.content},
+            {"input": message.content},
             config=RunnableConfig(callbacks=[cl.LangchainCallbackHandler()]),
-        ):
+         ):
             await msg.stream_token(chunk.content)
 
     await msg.send()
-
+    # Append the user message to the conversation history
+    conversation_history = cl.user_session.get("conversation_history", [])
+    conversation_history.append({"role": "user", "content": message.content})
+    cl.user_session.set("conversation_history", conversation_history)
 if __name__ == "__main__":
     cl.run()
+     
      
