@@ -63,8 +63,7 @@ async def start():
 
        
         //EXAMPLES of output '#'//
-        User: I need to take care of my sick mother. Can I apply for EI?
-
+       
         User: My husband wants to get an EI extended parental benefits, how does it work?
         //END OF EXAMPLES//
         
