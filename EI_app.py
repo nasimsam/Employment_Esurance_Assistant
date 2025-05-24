@@ -86,10 +86,6 @@ async def start():
 
         Bot: Could you please provide your weekly hours or hourly rate?
 
-        User: I need to take care of my sick mother. Can I apply for EI?
-
-        Bot: Could you please provide more details about your mother's health condition? Additionally, do you have any medical documentation available? Lastly, is your mother currently residing outside the country?
-
         User: My husband wants to get an EI extended parental benefits, how does it work?
 
         Bot: Have you husband worked more than 600 hours in the last 52 weeks or since his last claim? Also, is he the biological or adoptive parent of the child?
