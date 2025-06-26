@@ -2,7 +2,7 @@
 
 A Streamlit app that shows how to build a Robo Advisor using OpenAI's gpt-4o-mini. You can check out the app by clicking on the button below.
 
-[![Open in Hugging Face](https://huggingface.co/datasets/huggingface/badges/resolve/main/follow-badge-large.svg)](https://huggingface.co/spaces/nasim-samei/AI-agent)
+[![Open in Hugging Face](https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg)](https://huggingface.co/spaces/nasim-samei/AI-agent)
 
 ### How to run it on your own machine
 
