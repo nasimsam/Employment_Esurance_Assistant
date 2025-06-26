@@ -11,6 +11,11 @@ You can check out the app by clicking on the following link.
 
 [Open in Hugging Face](https://huggingface.co/spaces/nasim-samei/AI-agent)
 
+Additionally, you can view my presentation for the Employment Insurance Assistant App at the following link.
+
+[Demo Presentation](https://www.youtube.com/watch?v=4A3ADkcwmp0&t=2s&ab_channel=LLMsExplained-AggregateIntellect-AI.SCIENCE)
+
+
 ### How to run it on your machine
 
 1. Install the requirements
