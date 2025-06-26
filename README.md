@@ -1,6 +1,6 @@
 # 💬 Employment Ensurance Assistant
 
-A Streamlit app that shows how to build a Robo Advisor using OpenAI's gpt-4o-mini. You can check out the app by clicking on the button below.
+A Streamlit app that shows how to build a Robo Advisor using OpenAI's gpt-4o-mini. You can check out the app by clicking on the Hugging Face Logo.
 
 [![Open in Hugging Face](https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo-with-title.svg)](https://huggingface.co/spaces/nasim-samei/AI-agent)
 
