@@ -7,11 +7,11 @@ If a user’s scenario is unclear or requires an eligibility check, the assistan
 3.	Calculates weekly benefit rates: Given the hourly wage and weekly hours
 
    
-You can check out the app by clicking on the Hugging Face Logo.
+You can check out the app by clicking on the following link.
 
 [Open in Hugging Face](https://huggingface.co/spaces/nasim-samei/AI-agent)
 
-### How to run it on your own machine
+### How to run it on your machine
 
 1. Install the requirements
 
@@ -22,5 +22,5 @@ You can check out the app by clicking on the Hugging Face Logo.
 2. Run the app
 
    ```
-   $ streamlit run app.py
+   $ chainlit run app.py
    ```
